@@ -2,15 +2,15 @@ var Ball, database;
 var position;
 
 function setup() {
-    
+    database = firebase.database()
     console.log(database);
     createCanvas(500, 500);
 
-    Ball = createSprite (250,250,10,10);
+    Ball = createSprite (100,100,10,10);
     Ball.shapeColor = "red"; 
 
-    
-    
+    var ballPosition=database.ref("ball/positions")
+    ballPosition.on("value",readPosition)
 }
 
 function draw() {
@@ -28,14 +28,18 @@ function draw() {
 }
 
 function writePosition(x, y) {
-    
-    
-    
+    database.ref("ball/positions").update({
+    x:position.x+x,
+    y:position.y+y
+
+    })
+
 }
 
 function readPosition(data) {
-    
-    
+    position=data.val()
+    Ball.x=position.x
+    Ball.y=position.y
 }
 
 function showError() {
